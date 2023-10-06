@@ -134,7 +134,7 @@ def get_ioc(iocs, ioc_type,iocs_list):
 
 
 if __name__ == '__main__' :
-    misp_tag_list = ['tag_esempio'] # <----------------- add tag here 
+    misp_tag_list = [''] # <----------------- add tag here 
     print('Gonna search for:', misp_tag_list,'tags in MISP\'s instance')
     iocs_list = []
     auto_push(iocs_list,misp_tag_list)
