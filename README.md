@@ -4,17 +4,17 @@
 
 The script works with Misp and Qradar APIs. In order to make it work, you need to change some settings. 
 
------------------------------------------------------------- MISP Settings ----------------------------------------------------------------------------
+------------------------------------------------ MISP Settings -------------------------------------------------------------
 
         20  misp_url = 'https://'    # <-------- add misp instance url here
         21  misp_key = ''            # <-------- add misp api key (you maybe should allow IP's from MISP GUI -> api key settings)
 
------------------------------------------------------------- Qradar API Settings ----------------------------------------------------------------------
+------------------------------------------------ Qradar API Settings -------------------------------------------------------
 
         24  qradar_url = 'https://________________/api/reference_data/sets/bulk_load/{list_name}' # <------- add Qradar instance IP/URL here
         25  qradar_key = ''                                                                       # <------- add Qradar api key
 
------------------------------------------------------------- Other settings ---------------------------------------------------------------------------
+------------------------------------------------ Other settings -------------------------------------------------------------
 
         137  misp_tag_list = [''] # <----------------- add tag here 
 
