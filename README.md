@@ -22,10 +22,10 @@ The script works with Misp and Qradar APIs. In order to make it work, you need t
 LOGIC: 
 - Search for events by tag(s)
 - For each event create a list of attributes
-- Push the list to Qradar's Reference Set (RF)
-  - If the RF already exists, wipe the contents and push new attributes
-  - If the RF doesn't exist, create the RF and push attributes.
-  - The name of the RF comes from MISP's event info.
+- Push the list to Qradar's Reference Set (RS)
+  - If the RS already exists, wipe the contents and push new attributes
+  - If the RS doesn't exist, create the RS and push attributes.
+  - The name of the RS comes from MISP's event info.
 - If the list is bigger than 10k attributes, then split it and POST chunks to Qradar.
 
 More:
