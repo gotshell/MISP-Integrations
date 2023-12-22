@@ -4,7 +4,7 @@
 
 The script works with Misp and Qradar APIs. In order to make it work, you need to change some settings. 
 
------------------------------------------------- MISP Settings -------------------------------------------------------------
+------------------------------------------------ MISP API Settings ---------------------------------------------------------
 
         20  misp_url = 'https://'    # <-------- add misp instance url here
         21  misp_key = ''            # <-------- add misp api key (you maybe should allow IP's from MISP GUI -> api key settings)
@@ -56,6 +56,29 @@ LOGIC:
 
 ToDo: 
 - maybe implement a module that pulls/pushes from/to remote servers.
+
+
+# misp_to_TM_UDSO.py ---> Push MISP IOC(s) to Trend Micro User Defined Suspicious Objects List
+
+There's always some stuff to change.
+
+------------------------------------------------ MISP Settings -------------------------------------------------------------
+
+        misp_url = '' # <---- example: https://misp.yourdomain.com
+        misp_key = '' # <---- Your MISP API key
+        misp_verifycert = True
+
+---------------------------------------- TrendMicro Apex Central API Settings -----------------------------------------------
+
+        use_url_base = ''  #      <---- Complete url base - example: https://yourdomain.com
+        use_application_id = ''   <---- Can create one of this at TM AC Console Administration --> Settings --> Automation API Access Settings
+        use_api_key = ''          <---- Can create one of this at TM AC Console Administration --> Settings --> Automation API Access Settings
+
+------------------------------------------------------------------------------------------------------------------------------
+
+LOGIC: 
+- Search for events by tag(s)
+- 
 
 
 Cyall BRN
