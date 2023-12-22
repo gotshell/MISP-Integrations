@@ -39,41 +39,26 @@ def autopush_TrendMicro_ApexCentral(misp_tag_list):
             iocs = event['Event']['Attribute']
             event_name = event['Event']['info']
             for ioc in iocs:
-                att_count = 0
-                att_list = []
                 ioc_type = ioc['type']
                 ioc_value = ioc['value']
                 ioc_timestamp = datetime.utcfromtimestamp(int(ioc['timestamp']))
                 ioc_expire_date = ioc_timestamp + timedelta(days=30)
                 ioc_expire_date_iso = ioc_expire_date.isoformat()
-                try:
-                    attribute_tag_list = ioc.get('Tag', [])
-                    if attribute_tag_list:   
-                        pattern = r'recorded-future:risk-score="(\d+)"'     
-                        att_list = [att_tag['name'] for att_tag in attribute_tag_list]
-                        for tag_ in att_list:
-                            match_rf_risk_score = re.search(pattern, tag_)
-                            risk_score_number = int(match_rf_risk_score.group(1)) if match_rf_risk_score else None
-                            if risk_score_number is not None and risk_score_number >= 90 and att_count==0: 
-                                if ioc_type == 'ip-src' or ioc_type =='ip-dst':
-                                    ioc_type = 'ip'
-                                    send_it_to_TM(ioc_value, ioc_type,ioc_expire_date_iso, event_name)
-                                elif ioc_type == 'domain':
-                                    send_it_to_TM(ioc_value, ioc_type,ioc_expire_date_iso, event_name)
-                                elif ioc_type =='url':
-                                    send_it_to_TM(ioc_value, ioc_type,ioc_expire_date_iso, event_name)
-                                elif ioc_type == 'ip-dst|port' or ioc_type == 'ip-src|port':
-                                    ioc_type = 'ip'
-                                    cleaned_ioc = ioc_value_cleaner(ioc_value)
-                                    send_it_to_TM(cleaned_ioc, ioc_type,ioc_expire_date_iso, event_name)
-                                elif ioc_type == 'hostname|port':
-                                    ioc_type = 'domain'
-                                    cleaned_ioc = ioc_value_cleaner(ioc_value)
-                                    send_it_to_TM(cleaned_ioc, ioc_type,ioc_expire_date_iso, event_name)
-                                att_count=1
-                                
-                except Exception as e:
-                    print("--------------------------ERROR--------------------------: ", e) 
+                if ioc_type == 'ip-src' or ioc_type =='ip-dst':
+                    ioc_type = 'ip'
+                    send_it_to_TM(ioc_value, ioc_type,ioc_expire_date_iso, event_name)
+                elif ioc_type == 'domain':
+                    send_it_to_TM(ioc_value, ioc_type,ioc_expire_date_iso, event_name)
+                elif ioc_type =='url':
+                    send_it_to_TM(ioc_value, ioc_type,ioc_expire_date_iso, event_name)
+                elif ioc_type == 'ip-dst|port' or ioc_type == 'ip-src|port':
+                    ioc_type = 'ip'
+                    cleaned_ioc = ioc_value_cleaner(ioc_value)
+                    send_it_to_TM(cleaned_ioc, ioc_type,ioc_expire_date_iso, event_name)
+                elif ioc_type == 'hostname|port':
+                    ioc_type = 'domain'
+                    cleaned_ioc = ioc_value_cleaner(ioc_value)
+                    send_it_to_TM(cleaned_ioc, ioc_type,ioc_expire_date_iso, event_name)
 
     # end_time = time.time()
     # elapsed_time = end_time - start_time
@@ -100,6 +85,7 @@ def ioc_value_cleaner(ioc_value):
     return value_no_port_cleaned
 
 def send_it_to_TM(bad_ioc, ioc_type, ioc_expire_date_iso, event_name):
+
     productAgentAPIPath = '/WebApp/api/SuspiciousObjects/UserDefinedSO/'
     # productAgentAPIPath = '/WebApp/api/v1/SuspiciousObjects/UserDefinedSO/'
     canonicalRequestHeaders = ''
@@ -119,7 +105,7 @@ def send_it_to_TM(bad_ioc, ioc_type, ioc_expire_date_iso, event_name):
                                 productAgentAPIPath + useQueryString,
                                 canonicalRequestHeaders, useRequestBody, iat=time.time())
     headers = {'Authorization': 'Bearer ' + jwt_token, 'Content-Type': "application/json"}
-    #Choose by call type. 
+
     r = requests.put(use_url_base + productAgentAPIPath + useQueryString, headers=headers, data=useRequestBody, verify=False) 
     if r.status_code == 200:
         print('----------------------------------------------------------------------------------')
@@ -129,8 +115,9 @@ def send_it_to_TM(bad_ioc, ioc_type, ioc_expire_date_iso, event_name):
         print('Event Name:',event_name)
         print('Action: block')
         print('Expire date:',ioc_expire_date_iso)
- 
+
+
 if __name__ == '__main__' :
-    tags = ['to_TrendMicroApexCentral']
+    tags = ['ANYTAG']
     autopush_TrendMicro_ApexCentral(tags)
 
