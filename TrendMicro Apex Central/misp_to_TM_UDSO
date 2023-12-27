@@ -124,7 +124,7 @@ if __name__ == '__main__' :
 
 
 """
-# Checks for each attribute's tag, if the tag is found then pushes the attribute value to TM AC only if the tag (in this case risk-score) contains a number higher than 90. 
+# Checks for each attribute's tag, if the tag is found then pushes the attribute's value to TM AC only if the tag (in this case risk-score) contains a number higher than 90. 
 # You can easily adapt it to your needs
 
 for tag in misp_tag_list:
