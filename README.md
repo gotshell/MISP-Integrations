@@ -78,7 +78,10 @@ There's always some stuff to change.
 
 LOGIC: 
 - Search for events by tag(s)
-- 
+- For each ioc in each event, check for the timestamp and add 30 days.
+- If cases then do some changes
+- Send IOC value, IOC type, IOC expiration date (timestamp+30days), event name through API to TM.
+- Each IOC will be sent via a separate PUT request --> could take a while if you're pushing a huge amount of IOCs.
 
 
 Cyall BRN
