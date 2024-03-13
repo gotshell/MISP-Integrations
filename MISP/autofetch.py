@@ -1,6 +1,6 @@
 # ---------------------------------------------Libraries----------------------------------------------------
 import urllib3
-from pymisp import ExpandedPyMISP
+from pymisp import PyMISP
 # from colorama import init as colorama_init # Just if you need some colors :)
 # from colorama import Fore # Just if you need some colors :)
 # from colorama import Style # Just if you need some colors :)
@@ -32,7 +32,7 @@ if __name__ == '__main__' :
     tag_list_no_duplicates = list(set(tags))
     if tag_list_no_duplicates:
         # Connect to MISP
-        misp = ExpandedPyMISP(misp_url, misp_key, misp_verifycert)
+        misp = PyMISP(misp_url, misp_key, misp_verifycert)
         fetch_all_events(tag_list_no_duplicates)
     else:
         print('Please, add at least one tag to \'tags\' variable')
