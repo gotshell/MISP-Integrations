@@ -12,7 +12,7 @@ from colorama import Style
 # ---------------------------------------MISP API configuration-------------------------------------------
 
 misp_url = 'https://'    <--------- add misp url
-misp_key = ''            <--------- add 
+misp_key = ''            <--------- add misp key
 misp_verifycert = True
 
 # -------------------------------Trend Micro VisionOne API configuration----------------------------------
@@ -65,7 +65,7 @@ def autopush_TrendMicro_VisionOne(misp_tag_list):
                     try:
                         attribute_tag_list = ioc.get('Tag', [])
                         if attribute_tag_list:   
-                            pattern = r'recorded-future:risk-score="(\d+)"'     
+                            pattern = r'risk-score="(\d+)"'     
                             att_list = [att_tag['name'] for att_tag in attribute_tag_list]
                             for tag_ in att_list:
                                 match_rf_risk_score = re.search(pattern, tag_)
