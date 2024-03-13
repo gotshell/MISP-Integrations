@@ -1,11 +1,7 @@
-
+# -------------------------------------------LIBRARIES--------------------------------------------------
 import requests
-# import json
 import re
 from pymisp import PyMISP
-# import base64
-# import jwt
-# import hashlib
 import time
 from datetime import datetime,timedelta
 import urllib3
