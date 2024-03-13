@@ -1,5 +1,5 @@
 import urllib3
-from pymisp import ExpandedPyMISP
+from pymisp import PyMISP
 from datetime import datetime
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -21,7 +21,7 @@ def old_event_eraser(misp, delete_from):
             print('Deleted')
 
 if __name__ == '__main__' :
-    misp = ExpandedPyMISP(misp_url, misp_key, misp_verifycert)
+    misp = PyMISP(misp_url, misp_key, misp_verifycert)
     today = date.today()
     one_month_ago = today - relativedelta(months=1)                                         # <------- It will delete events older than 1 month
     old_event_eraser(misp, one_month_ago)
