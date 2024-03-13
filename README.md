@@ -84,5 +84,49 @@ LOGIC:
 - Each IOC will be sent via a separate PUT request --> could take a while if you're pushing a huge amount of IOCs.
 
 
+# misp_to_VisionOne ---> Push Misp's events to TrendMicro VisionOne
+
+------------------------------------------------ MISP Settings -------------------------------------------------------------
+
+        misp_url = '' # <---- example: https://misp.yourdomain.com
+        misp_key = '' # <---- Your MISP API key
+        misp_verifycert = True
+
+------------------------------------------ TrendMicro VisionOne API Settings -------------------------------------------------
+
+        url_base = 'https://api.eu.xdr.trendmicro.com/'
+
+            # U.S. (global)                 = api.tmcas.trendmicro.com                        
+            # EU                            = api-eu.tmcas.trendmicro.com
+            # Japan                         = api.tmcas.trendmicro.co.jp
+            # Australia and New Zealand     = api-au.tmcas.trendmicro.com
+            # UK                            = api.tmcas.trendmicro.co.uk
+            # Canada                        = api-ca.tmcas.trendmicro.com
+            # Singapore                     = api.tmcas.trendmicro.com.sg
+            # India                         = api-in.tmcas.trendmicro.com
+            
+        url_path = '/v3.0/threatintel/suspiciousObjects'
+        token = '' # <--------------------------------------Enter VisionOne Token [Administration/API-KEYS/add_new_api_key]
+        query_params = {}
+        headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+
+------------------------------------------------ GLOBAL VARIABLES -----------------------------------------------------------
+
+        DAYS_TO_EXPIRATION = '15'          <---- according to your needs
+        RISK_LEVEL = 'high'                <---- according to your needs
+        SCAN_ACTION = 'block'              <---- according to your needs
+        
+------------------------------------------------------------------------------------------------------------------------------
+
+LOGIC: 
+- Search for events by tag(s)
+- For each event create lists by type and fill them with iocs
+- Create body json from each ioc list
+- Send json to VisionOne through API. 
+
+
 Cyall BRN
 
