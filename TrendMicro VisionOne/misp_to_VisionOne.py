@@ -57,17 +57,18 @@ def autopush_TrendMicro_VisionOne(misp_tag_list):
             for ioc in iocs:
                 att_count, att_list, ioc_type, ioc_value = 0, [], ioc.type, ioc.value
             '''
-                if  org_name == ORG_:
-                    try:
-                        attribute_tag_list = ioc.Tag
-                        if attribute_tag_list:   
-                            pattern = r'recorded-future:risk-score="(\d+)"'   
-                            att_list = [att_tag.name for att_tag in attribute_tag_list]
-                            print(att_list)
-                            for tag_ in att_list:
-                                match_rf_risk_score = re.search(pattern, tag_)
-                                risk_score_number = int(match_rf_risk_score.group(1)) if match_rf_risk_score else None
-                                if risk_score_number is not None and risk_score_number >= 80 and att_count==0: 
+            # You can use this piece of code to check for attribute tag. In this case it searches for recorded-future:risk-score="SOMETHING" and if it's more than 80 then appends value to the list. 
+                if  org_name == ORG_:                                                                                                                       #       |
+                    try:                                                                                                                                    #       |
+                        attribute_tag_list = ioc.Tag                                                                                                        #       |
+                        if attribute_tag_list:                                                                                                              #       |    
+                            pattern = r'recorded-future:risk-score="(\d+)"'                                                                                 #    <--|
+                            att_list = [att_tag.name for att_tag in attribute_tag_list]                                                                     #       |
+                            print(att_list)                                                                                                                 #       |
+                            for tag_ in att_list:                                                                                                           #       |
+                                match_rf_risk_score = re.search(pattern, tag_)                                                                              #       |
+                                risk_score_number = int(match_rf_risk_score.group(1)) if match_rf_risk_score else None                                      #       |
+                                if risk_score_number is not None and risk_score_number>=80 and att_count==0:                                                #    <--
                                     if ioc_type == 'ip-src' or ioc_type =='ip-dst': ip_list.append(ioc_value)
                                     elif ioc_type == 'domain': domain_list.append(ioc_value)
                                     elif ioc_type =='url': url_list.append(ioc_value)
