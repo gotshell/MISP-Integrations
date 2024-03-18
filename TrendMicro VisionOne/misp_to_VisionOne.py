@@ -35,9 +35,11 @@ headers = {
 }
 
 #---------------------------------------------GLOBAL VARIABLES----------------------------------------------
-DAYS_TO_EXPIRATION = '15'
+DAYS_TO_EXPIRATION = '30'
 RISK_LEVEL = 'high'
 SCAN_ACTION = 'block'
+ORG_TO_SEARCH_FOR = ['BRN', 'BLABLA']
+ORG_ = 'BRN'
 #----------------------------------------------------------------------------------------------------------
 
 # Disabling certificate warnings
@@ -45,28 +47,23 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def autopush_TrendMicro_VisionOne(misp_tag_list):
     misp = PyMISP(misp_url, misp_key, misp_verifycert)
+    start_time = time.time()
     for tag in misp_tag_list:
-        events = misp.search(tag=tag)
+        events = misp.search(controller='events', tag=tag, org=ORG_TO_SEARCH_FOR, to_ids=1, pythonify=True)
         for event in events:
-            iocs = event['Event']['Attribute']
-            event_name = event['Event']['info']
+            iocs, event_name, org_name = event.attributes, event.info, event.Orgc.name
+            ip_list, domain_list, url_list, sha1_list, sha256_list = [], [], [], [], []
             print(event_name)
-            org_name = event['Event']['Orgc']['name']
-            ip_list = [], domain_list = [], url_list = [], sha1_list = [], sha256_list = []
             for ioc in iocs:
-                # att_count = 0
-                # att_list = []
-                ioc_type = ioc['type']
-                ioc_value = ioc['value']
-
-''' 
-# You can use this piece of code to check for iocs tags 
-                if  org_name =='RF':
+                att_count, att_list, ioc_type, ioc_value = 0, [], ioc.type, ioc.value
+            '''
+                if  org_name == ORG_:
                     try:
-                        attribute_tag_list = ioc.get('Tag', [])
+                        attribute_tag_list = ioc.Tag
                         if attribute_tag_list:   
-                            pattern = r'risk-score="(\d+)"'     
-                            att_list = [att_tag['name'] for att_tag in attribute_tag_list]
+                            pattern = r'recorded-future:risk-score="(\d+)"'   
+                            att_list = [att_tag.name for att_tag in attribute_tag_list]
+                            print(att_list)
                             for tag_ in att_list:
                                 match_rf_risk_score = re.search(pattern, tag_)
                                 risk_score_number = int(match_rf_risk_score.group(1)) if match_rf_risk_score else None
@@ -83,12 +80,10 @@ def autopush_TrendMicro_VisionOne(misp_tag_list):
                                     elif ioc_type == 'sha1': sha1_list.append(ioc_value)
                                     elif ioc_type == 'sha256': sha256_list.append(ioc_value)
                                     att_count=1
-
                     except Exception as e:
-                        print("--------------------------ERROR--------------------------: ", e)
-
+                        print("--------------------------ERROR--------------------------: ", e) 
                 else:
-'''
+                '''
                 if ioc_type == 'ip-src' or ioc_type =='ip-dst': ip_list.append(ioc_value)
                 elif ioc_type == 'domain': domain_list.append(ioc_value)
                 elif ioc_type =='url': url_list.append(ioc_value)
@@ -106,6 +101,10 @@ def autopush_TrendMicro_VisionOne(misp_tag_list):
             if url_list: send_it_to_VisionOne(url_list, 'url', event_name)
             if sha1_list: send_it_to_VisionOne(sha1_list, 'fileSha1', event_name)
             if sha256_list: send_it_to_VisionOne(sha256_list, 'fileSha256', event_name)
+
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print("Elapsed time misp.search: ", elapsed_time)
 
 def ioc_value_cleaner(ioc_value):
     if '|' in ioc_value:
@@ -129,7 +128,6 @@ def send_it_to_VisionOne(bad_ioc, ioc_type, event_name):
     if r.status_code == 207:
         print('----------------------------------------------------------------------------------')
         print('IOC sent to VisionOne instance')
-
 
 if __name__ == '__main__' :
     tags = [''] # <----------------ADD TAGS HERE-----------------------
