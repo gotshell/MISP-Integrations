@@ -18,6 +18,13 @@ colorama_init()
 # TODO : CHECK FOR REFERENCE SET BEFORE TRYING TO PUSH SOMETHING IN IT
 # TODO : ADD EXPIRATION DATE TO IOCS PUSHED TO QRADAR
 # 
+# This script searches for events in the last 5 minutes and pushes attributes value to Qradar's 
+# reference sets and VisionOne UDSO list
+#
+# Please add your keys/urls first
+#
+# If you don't need qradar integration just comment line 96 and 97
+#
 # ==============================================================================================================
 
 
