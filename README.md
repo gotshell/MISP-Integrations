@@ -136,7 +136,7 @@ Please add your keys/urls first
 If you don't need qradar integration just comment line 96 and 97
 
 You should setup a cronjob that runs this code every 5 minutes. You can use the following: 
-- */5 7-18 * * * /usr/bin/python3 /opt/integrations/push_last_events.py
+- */5 7-18 * * * /path/to/your/python3 /path/to/your/push_last_events.py
 
 ------------------------------------------------ MISP Settings -------------------------------------------------------------
 
