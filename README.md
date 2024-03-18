@@ -84,7 +84,7 @@ LOGIC:
 - Each IOC will be sent via a separate PUT request --> could take a while if you're pushing a huge amount of IOCs.
 
 
-# misp_to_VisionOne ---> Push Misp's events to TrendMicro VisionOne
+# misp_to_VisionOne.py ---> Push Misp's events to TrendMicro VisionOne
 
 ------------------------------------------------ MISP Settings -------------------------------------------------------------
 
@@ -127,6 +127,59 @@ LOGIC:
 - Create body json from each ioc list
 - Send json to VisionOne through API. 
 
+
+# push_last_5m_events.py ---> Push newest Misp's events to TrendMicro VisionOne and Qradar Reference Sets
+
+This script searches for events in the last 5 minutes and pushes attributes value to Qradar's reference sets and VisionOne UDSO list
+Please add your keys/urls first
+
+If you don't need qradar integration just comment line 96 and 97
+
+You should setup a cronjob that runs this code every 5 minutes. You can use the following: 
+- */5 7-18 * * * /usr/bin/python3 /opt/integrations/push_last_events.py
+
+------------------------------------------------ MISP Settings -------------------------------------------------------------
+
+        misp_url = '' # <---- example: https://misp.yourdomain.com
+        misp_key = '' # <---- Your MISP API key
+        misp_verifycert = True
+        
+------------------------------------------------ Qradar API Settings -------------------------------------------------------------
+
+        qradar_url = 'https://_____________/api/reference_data/sets/bulk_load/'
+        qradar_key = ''
+
+------------------------------------------ TrendMicro VisionOne API Settings -------------------------------------------------
+
+        url_base = 'https://api.eu.xdr.trendmicro.com/'
+
+            # U.S. (global)                 = api.tmcas.trendmicro.com                        
+            # EU                            = api-eu.tmcas.trendmicro.com
+            # Japan                         = api.tmcas.trendmicro.co.jp
+            # Australia and New Zealand     = api-au.tmcas.trendmicro.com
+            # UK                            = api.tmcas.trendmicro.co.uk
+            # Canada                        = api-ca.tmcas.trendmicro.com
+            # Singapore                     = api.tmcas.trendmicro.com.sg
+            # India                         = api-in.tmcas.trendmicro.com
+            
+        url_path = '/v3.0/threatintel/suspiciousObjects'
+        token = '' # <--------------------------------------Enter VisionOne Token [Administration/API-KEYS/add_new_api_key]
+        query_params = {}
+        headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+
+------------------------------------------------ GLOBAL VARIABLES -----------------------------------------------------------
+
+        QRADAR_IP_REFERENCE_SET = 'qradar_reference_set_name_IP'           <---- according to your needs
+        QRADAR_URL_REFERENCE_SET = 'qradar_reference_set_name_URL'         <---- according to your needs
+        LAST_MINUTES = '5m'                                                <---- according to your needs
+        DAYS_TO_EXPIRATION = '15'                                          <---- according to your needs
+        RISK_LEVEL = 'high'                                                <---- according to your needs
+        SCAN_ACTION = 'block'                                              <---- according to your needs
+        
+------------------------------------------------------------------------------------------------------------------------------
 
 Cyall BRN
 
