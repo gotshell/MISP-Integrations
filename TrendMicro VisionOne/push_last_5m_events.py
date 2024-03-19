@@ -1,4 +1,5 @@
 # Importing libraries
+from datetime import datetime, timedelta
 from pymisp import PyMISP
 import requests
 import urllib3
@@ -65,29 +66,41 @@ LAST_MINUTES = '5m'
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def search_and_create_set(orgs):
+    # Connection to MISP instance 
     misp = PyMISP(misp_url, misp_key, misp_verifycert)
     for organization in orgs:
+        # Some sets/lists to be pushed through API
         url_set, domain_set, ip_set, email_set, sha1_set, sha256_set = set(), set(), set(), set(), set(), set()
         qradar_url_list, qradar_ip_list = [], []
+        # Search for events in the last 5 minutes
         events = misp.search(controller='events', org=organization, to_ids=1, last=LAST_MINUTES, pythonify=True)
         for event in events:
+            # for each event get info and attributes 
             attributes, event_info = event.attributes, event.info
             print(event_info)
             for attribute in attributes:
+                # for each attribute get timestamp
                 att_value = attribute.value
                 att_type = check_type(att_value)
-                if att_type == 'url': 
-                    url_set.add(att_value)
-                    qradar_url_list.append(att_value)
-                elif att_type == 'domain': 
-                    domain_set.add(att_value)
-                    qradar_url_list.append(att_value)
-                elif att_type == 'Public IPv4': 
-                    ip_set.add(att_value)
-                    qradar_ip_list.append(att_value)
-                elif att_type == 'file_sha1': sha1_set.add(att_value)
-                elif att_type == 'SHA-256': sha256_set.add(att_value)
-
+                attribute_timestamp = attribute.timestamp.replace(tzinfo=None)
+                current_time = datetime.now()
+                one_hour_ago = current_time-timedelta(hours=1)
+                timestamp_diff = (one_hour_ago - attribute_timestamp).total_seconds()/60
+                # check if it's a new attribute or an oldest one (that we already pushed the last run)
+                if timestamp_diff<5:    
+                    # start creating sets/lists
+                    if att_type == 'url': 
+                        url_set.add(att_value)
+                        qradar_url_list.append(att_value)
+                    elif att_type == 'domain': 
+                        domain_set.add(att_value)
+                        qradar_url_list.append(att_value)
+                    elif att_type == 'Public IPv4': 
+                        ip_set.add(att_value)
+                        qradar_ip_list.append(att_value)
+                    elif att_type == 'file_sha1': sha1_set.add(att_value)
+                    elif att_type == 'SHA-256': sha256_set.add(att_value)
+        # push to IDS if lists are not empty
         if url_set: push_to_tm_vision_one(url_set, 'url', f'{organization}\'s MISP event - {event_info}')      
         if domain_set: push_to_tm_vision_one(domain_set, 'domain', f'{organization}\'s MISP event - {event_info}')          
         if ip_set: push_to_tm_vision_one(ip_set, 'ip', f'{organization}\'s MISP event - {event_info}')
@@ -96,7 +109,7 @@ def search_and_create_set(orgs):
         if qradar_ip_list: push_to_qradar(qradar_ip_list, QRADAR_IP_REFERENCE_SET)
         if qradar_url_list: push_to_qradar(qradar_url_list, QRADAR_URL_REFERENCE_SET)
 
-
+# This method does a post request to qradar's API url. The post request contains the list that has to be pushed to the reference set
 def push_to_qradar(iocs_list, list_name):
     headers = {
     'Content-Type': 'application/json',
@@ -118,6 +131,7 @@ def push_to_qradar(iocs_list, list_name):
         print('2Generic Error: ', e)
     time.sleep(3) 
 
+# This method creates a json body from an IOCs list and does a post request to TM VisionOne API url.
 def push_to_tm_vision_one(bad_ioc, ioc_type, event_name):
     body = []
     for ioc in bad_ioc:
@@ -135,7 +149,7 @@ def push_to_tm_vision_one(bad_ioc, ioc_type, event_name):
         print('----------------------------------------------------------------------------------')
         print('IOC sent to VisionOne instance')
 
-
+# This method checks if the input ip address is private or public
 def is_public_ipv4(ip):
     try:
         ip_obj = ipaddress.ip_address(ip)
