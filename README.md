@@ -1,5 +1,7 @@
 # MISP-Integrations
 
+# Utils.txt: Tips and tricks / troubleshooting file
+
 # autopush.py ---> Push Misp events to Qradar Reference Set
 
 The script works with Misp and Qradar APIs. In order to make it work, you need to change some settings. 
