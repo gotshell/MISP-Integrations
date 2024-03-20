@@ -5,3 +5,60 @@
   and check the timezone. If wrong just change it f.i. [FROM: date.timezone = "Asia/Tokyo" --> TO: date.timezone = "Europe/Rome"
 
 - Default workers runs fetch jobs --> more default workes more fetch jobs at same time. 
+
+- If you lose your DB password "BAD :\" --> I got you <3   (yeah it happened to me) 
+  
+  - Ubuntu/Debian: MySQLsudo service mysql stop
+  - Ubuntu/Debian: MariaDBsudo service mariadb stop
+  - CentOS/Red Hat: MySQLsudo systemctl stop mysql
+  - CentOS/Red Hat: MariaDBsudo systemctl stop mariadb
+
+  Start MySQL/MariaDB in Safe Mode with the command:
+  >  mysqld_safe --skip-grant-tables &
+
+  You can now log in to MySQL/MariaDB as root without having to enter a password:
+  >  mysql -u root mysql
+
+  Reset the MySQL/MariaDB password with the following command. Change my-new-password to a secure password.
+  mysql>  UPDATE user SET password=PASSWORD("my-new-password") WHERE user='misp'; 
+     # you can even change root password --> user='root' (don't know if it will break something, USE AT YOUR OWN RISK) 
+
+  Reload the privilege tables:
+  mysql>  FLUSH PRIVILEGES;
+
+  Exit the MySQL/MariaDB client:
+  mysql> quit;
+
+  OPTIONAL: 
+  Shut down MySQL/MariaDB:
+  > mysqladmin -u root -p shutdown
+
+  Finally, restart the database in normal mode:
+
+  - Ubuntu/Debian: MySQLsudo service mysql start
+  - Ubuntu/Debian: MariaDBsudo service mariadb start
+  - CentOS/Red Hat: MySQLsudo systemctl start mysql
+  - CentOS/Red Hat: MariaDBsudo systemctl start mariadb
+
+  IF YOU CHANGED misp user password YOU HAVE TO CHANGE THE PASSWORD IN THE FOLLOWING FILE (otherwise you break everything) 
+  
+  - sudo nano /var/www/MISP/app/Config/database.php
+  
+      <?php
+        class DATABASE_CONFIG {
+                public $default = array(
+                        'datasource' => 'Database/Mysql',
+                        //'datasource' => 'Database/Postgres',
+                        'persistent' => false,
+                        'host' => 'localhost',
+                        'login' => 'misp',
+                        'port' => 3306, // MySQL & MariaDB
+                        //'port' => 5432, // PostgreSQL
+                        'password' => 'your-new-password',
+                        'database' => 'misp',
+                        'prefix' => '',
+                        'encoding' => 'utf8',
+                );
+        }
+  - Change your-new-password to your new password (plaintext)
+  - systemctl restart php-fpm.service
