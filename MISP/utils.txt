@@ -1,0 +1,7 @@
+# Some tips and tricks for MISP
+
+- If your footer time is not correct:
+  sudo nano /etc/php-fpm.d/timezone.ini 
+  and check the timezone. If wrong just change it f.i. [FROM: date.timezone = "Asia/Tokyo" --> TO: date.timezone = "Europe/Rome"
+
+- Default workers runs fetch jobs --> more default workes more fetch jobs at same time. 
