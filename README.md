@@ -132,7 +132,7 @@ LOGIC:
 
 # push_last_5m_events.py ---> Push newest Misp's events to TrendMicro VisionOne and Qradar Reference Sets
 
-This script searches for events in the last 5 minutes and pushes attributes value to Qradar's reference sets and VisionOne UDSO list
+This script searches for events in the last 5 minutes and pushes attributes value to Qradar's reference sets and VisionOne UDSO list.
 Please add your keys/urls first
 
 If you don't need qradar integration just comment line 96 and 97
