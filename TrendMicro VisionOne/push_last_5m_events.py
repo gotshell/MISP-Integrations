@@ -88,7 +88,7 @@ def search_and_create_set(orgs):
                 timestamp_diff = (one_hour_ago - attribute_timestamp).total_seconds()/60
                 # check if it's a new attribute or an oldest one (that we already pushed the last run)
                 if timestamp_diff<5:    
-                    # start creating sets/lists
+                    # create sets/lists
                     if att_type == 'url': 
                         url_set.add(att_value)
                         qradar_url_list.append(att_value)
