@@ -96,17 +96,7 @@ LOGIC:
 
 ------------------------------------------ TrendMicro VisionOne API Settings -------------------------------------------------
 
-        url_base = 'https://api.eu.xdr.trendmicro.com/'
-
-            # U.S. (global)                 = api.tmcas.trendmicro.com                        
-            # EU                            = api-eu.tmcas.trendmicro.com
-            # Japan                         = api.tmcas.trendmicro.co.jp
-            # Australia and New Zealand     = api-au.tmcas.trendmicro.com
-            # UK                            = api.tmcas.trendmicro.co.uk
-            # Canada                        = api-ca.tmcas.trendmicro.com
-            # Singapore                     = api.tmcas.trendmicro.com.sg
-            # India                         = api-in.tmcas.trendmicro.com
-            
+        url_base = 'https://api.eu.xdr.trendmicro.com/'            
         url_path = '/v3.0/threatintel/suspiciousObjects'
         token = '' # <--------------------------------------Enter VisionOne Token [Administration/API-KEYS/add_new_api_key]
         query_params = {}
@@ -153,17 +143,7 @@ You should setup a cronjob that runs this code every 5 minutes. You can use the 
 
 ------------------------------------------ TrendMicro VisionOne API Settings -------------------------------------------------
 
-        url_base = 'https://api.eu.xdr.trendmicro.com/'
-
-            # U.S. (global)                 = api.tmcas.trendmicro.com                        
-            # EU                            = api-eu.tmcas.trendmicro.com
-            # Japan                         = api.tmcas.trendmicro.co.jp
-            # Australia and New Zealand     = api-au.tmcas.trendmicro.com
-            # UK                            = api.tmcas.trendmicro.co.uk
-            # Canada                        = api-ca.tmcas.trendmicro.com
-            # Singapore                     = api.tmcas.trendmicro.com.sg
-            # India                         = api-in.tmcas.trendmicro.com
-            
+        url_base = 'https://api.eu.xdr.trendmicro.com/'            
         url_path = '/v3.0/threatintel/suspiciousObjects'
         token = '' # <--------------------------------------Enter VisionOne Token [Administration/API-KEYS/add_new_api_key]
         query_params = {}
