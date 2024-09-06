@@ -13,7 +13,7 @@ headers = {
     'Content-Type': 'application/json'
 }
 
-tags_to_keep = ['']  # Add tags you want to keep
+tags_to_keep = ['']  # Add tag names you want to keep
 num_worker_threads = 20  # Max thread number MODIFY THIS TO RUN FASTER/SLOWER  (try to NOT DoS yourself)
 queue = Queue() # Task queue
 
