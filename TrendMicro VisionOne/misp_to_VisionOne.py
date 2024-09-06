@@ -35,7 +35,7 @@ headers = {
 }
 
 #---------------------------------------------GLOBAL VARIABLES----------------------------------------------
-DAYS_TO_EXPIRATION = '30'
+DAYS_TO_EXPIRATION = '15'
 RISK_LEVEL = 'high'
 SCAN_ACTION = 'block'
 ORG_TO_SEARCH_FOR = ['BRN', 'BLABLA']
