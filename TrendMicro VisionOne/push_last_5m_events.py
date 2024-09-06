@@ -53,7 +53,7 @@ headers = {
 }
 
 #---------------------------------------------GLOBAL VARIABLES----------------------------------------------
-DAYS_TO_EXPIRATION = '30'
+DAYS_TO_EXPIRATION = '15'
 RISK_LEVEL = 'high'
 SCAN_ACTION = 'block'
 QRADAR_IP_REFERENCE_SET = 'qradar_reference_set_name_IP'
