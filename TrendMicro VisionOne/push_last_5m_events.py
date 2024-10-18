@@ -82,7 +82,7 @@ def search_and_create_set(orgs) -> None:
             # for each event get info and attributes 
             attributes, event_info = event.attributes, event.info
             event_tag_names = [tag.name for tag in event.tags]
-            # if 'tryTag' not in event_tag_names or 'tryTag1' not in event_tag_names:
+            # if 'DEBUGTAG' not in event_tag_names:
             for attribute in attributes:
                 att_value = attribute.value
                 att_type = check_type(att_value)
