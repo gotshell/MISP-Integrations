@@ -79,15 +79,14 @@ def search_and_create_set(orgs):
             attributes, event_info = event.attributes, event.info
             print(event_info)
             for attribute in attributes:
-                # for each attribute get timestamp
                 att_value = attribute.value
                 att_type = check_type(att_value)
-                attribute_timestamp = attribute.timestamp.replace(tzinfo=None)
+                att_timestamp = attribute.timestamp
+                adjusted_timestamp = attribute.timestamp + timedelta(hours=2)
+                attribute_timestamp = adjusted_timestamp.replace(tzinfo=None)
                 current_time = datetime.now()
-                one_hour_ago = current_time-timedelta(hours=1)
-                timestamp_diff = (one_hour_ago - attribute_timestamp).total_seconds()/60
-                # check if it's a new attribute or an oldest one (that we already pushed the last run)
-                if timestamp_diff<=300:    
+                five_minutes_ago = current_time-timedelta(minutes=5)
+                if attribute_timestamp>five_minutes_ago:
                     # create sets/lists
                     if att_type == 'url': 
                         url_set.add(att_value)
