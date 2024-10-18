@@ -65,27 +65,35 @@ LAST_MINUTES = '5m'
 # Disabling certificate warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def search_and_create_set(orgs):
-    # Connection to MISP instance 
+def search_and_create_set(orgs) -> None:
     misp = PyMISP(misp_url, misp_key, misp_verifycert)
     for organization in orgs:
         # Some sets/lists to be pushed through API
         url_set, domain_set, ip_set, email_set, sha1_set, sha256_set = set(), set(), set(), set(), set(), set()
         qradar_url_list, qradar_ip_list = [], []
+        print(f'Start searching for ORG: {organization}')
+        start_time = time.time()
         # Search for events in the last 5 minutes
-        events = misp.search(controller='events', org=organization, to_ids=1, last=LAST_MINUTES, pythonify=True)
+        events = misp.search(controller='events', published=True, org=organization, to_ids=1, last=LAST_5_MINS, pythonify=True)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f'MISP search ended in {elapsed_time}') 
         for event in events:
             # for each event get info and attributes 
             attributes, event_info = event.attributes, event.info
-            print(event_info)
+            event_tag_names = [tag.name for tag in event.tags]
+            # if 'tryTag' not in event_tag_names or 'tryTag1' not in event_tag_names:
             for attribute in attributes:
                 att_value = attribute.value
                 att_type = check_type(att_value)
                 att_timestamp = attribute.timestamp
                 adjusted_timestamp = attribute.timestamp + timedelta(hours=2)
                 attribute_timestamp = adjusted_timestamp.replace(tzinfo=None)
+                # print(f'attribute_timestamp {attribute_timestamp} of {att_value}')
                 current_time = datetime.now()
+                # print('current_time', current_time)
                 five_minutes_ago = current_time-timedelta(minutes=5)
+                # print('five_minutes_ago',five_minutes_ago)
                 if attribute_timestamp>five_minutes_ago:
                     # create sets/lists
                     if att_type == 'url': 
@@ -99,6 +107,7 @@ def search_and_create_set(orgs):
                         qradar_ip_list.append(att_value)
                     elif att_type == 'file_sha1': sha1_set.add(att_value)
                     elif att_type == 'SHA-256': sha256_set.add(att_value)
+                        
         # push to IDS if lists are not empty
         if url_set: push_to_tm_vision_one(url_set, 'url', f'{organization}\'s MISP event - {event_info}')      
         if domain_set: push_to_tm_vision_one(domain_set, 'domain', f'{organization}\'s MISP event - {event_info}')          
