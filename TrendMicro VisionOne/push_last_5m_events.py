@@ -24,7 +24,7 @@ colorama_init()
 #
 # Please add your keys/urls first
 #
-# If you don't need qradar integration just comment line 96 and 97
+# If you don't need qradar integration just comment line 117 and 118
 #
 # ==============================================================================================================
 
