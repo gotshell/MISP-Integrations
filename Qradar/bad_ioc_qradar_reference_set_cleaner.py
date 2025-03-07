@@ -15,15 +15,16 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 QRADAR_URL = "https://YOUR_QRADAR/api"
-API_TOKEN = ''
+QRADAR_API_TOKEN = ''
 REFERENCE_SET_NAME = 'REFERENCE SET NAME'
 ABUSEIPDB_API_TOKEN = 'ABUSEIPDB TOKEN'
 ABUSEIPDB_MAX_AGE_IN_DAYS = '365'
-headers = {
-    'Content-Type': 'application/json',
-    'SEC': API_TOKEN
-}
+
 def get_qradar_reference_set():
+    headers = {
+    'Content-Type': 'application/json',
+    'SEC': QRADAR_API_TOKEN
+    }
     url = f"{QRADAR_URL}/reference_data/sets/{REFERENCE_SET_NAME}"
     try:    
         response = requests.get(url, headers=headers, verify=False)  
