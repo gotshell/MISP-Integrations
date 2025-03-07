@@ -104,5 +104,5 @@ if __name__ == '__main__':
     finally:
         with open(file_path, 'a') as above_0_file:
             # if count > 0: print(count)
-            if above_0_list: print(f'Scrivo nel file')
+            if above_0_list: print(f'Writing {file_path}')
             for item in above_0_list: above_0_file.write(item + "\n")
