@@ -7,6 +7,8 @@ import urllib3
 from datetime import datetime, timedelta
 import os
 
+# Gets Qradar Reference Set containing malicious IPs, checks each IP that was seen in the last 180days on abuseipdb, if score==0 then removes it from the reference set.
+
 init(autoreset=False)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
