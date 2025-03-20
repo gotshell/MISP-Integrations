@@ -34,7 +34,7 @@ def list_maker(misp_tag_list):
     for tag in misp_tag_list:
         logging.info(f"Starting search for tag: {tag}")
         start_time = time.time()
-        events = misp.search(controller='events', tag=tag, org=ORG_TO_SEARCH_FOR, timestamp='14d', to_ids=1, pythonify=True)
+        events = misp.search(controller='events', tag=tag, org=ORG_TO_SEARCH_FOR, last='14d', to_ids=1, pythonify=True)
         end_time = time.time()
         elapsed_time = end_time - start_time
         logging.info(f"Elapsed time misp.search(tag={tag}): {elapsed_time}")
