@@ -26,7 +26,6 @@ EXP_DAYS = 30
 # ------------------------------------------------------------------------------------------------------
 
 def get_iocs_from_misp(misp_tag_list, access_token, ioc_list):
-    misp = PyMISP(misp_url, misp_key, misp_verifycert)
     total_domains, total_urls, total_ips, total_sha1, total_sha256, iocs_count = 0, 0, 0, 0, 0, 0
     misp = PyMISP(misp_url, misp_key, misp_verifycert)
     logging.info(f"Tags provided {misp_tag_list}")
