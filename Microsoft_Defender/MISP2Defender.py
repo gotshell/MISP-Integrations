@@ -170,7 +170,7 @@ def get_defender_ioc_list():
         list_iocs_estratti = [ioc['indicatorValue'] for ioc in data['value']] if data is not None else []
         return list_iocs_estratti
     else:
-        print("[❌] Errore:", response.status_code)
+        print("[❌] Error:", response.status_code)
         print(response.text)
 
 def get_defender_ioc_and_ids():
@@ -182,7 +182,7 @@ def get_defender_ioc_and_ids():
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        print("[✅] Indicatori ottenuti con successo!")
+        print("[✅] Got IOCs")
         data = response.json()
         dict_iocs_estratti = {
             ioc["id"]: ioc["indicatorValue"]
